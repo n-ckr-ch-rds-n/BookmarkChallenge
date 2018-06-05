@@ -5,16 +5,33 @@ describe Bookmark do
   describe '#all' do
     it 'returns all the bookmarks' do
       connection = PG.connect(dbname: 'bookmark_manager_test')
-      connection.exec("INSERT INTO bookmarks (url) VALUES ('http://makersacademy.com')")
-      expect(Bookmark.all).to include "http://makersacademy.com"
+      bookmark_1 = Bookmark.create(url: "http://makersacademy.com")
+      bookmark_2 = Bookmark.create(url: "http://destroyallsoftware.com")
+      bookmark_3 = Bookmark.create(url: "http://google.com")
+
+      expected_bookmarks = [
+        bookmark_1,
+        bookmark_2,
+        bookmark_3
+      ]
+
+      expect(Bookmark.all).to eq expected_bookmarks
+    end
+  end
+
+  describe '#==' do
+    it 'two Bookmarks are equal if their IDs match' do
+      bookmark_1 = Bookmark.new(1, url: 'http://testbookmark.com')
+      bookmark_2 = Bookmark.new(1, url: 'http://testbookmark.com')
+
+      expect(bookmark_1).to eq bookmark_2
     end
   end
 
   describe '.create' do
     it 'creates a bookmark' do
-
-      Bookmark.create(url: 'http://www.bbc.co.uk')
-      expect(Bookmark.all).to include 'http://www.bbc.co.uk'
+      bookmark = Bookmark.create(url: 'http://testbookmark.com')
+      expect(Bookmark.all).to include bookmark
     end
   end
 end
