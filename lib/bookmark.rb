@@ -1,4 +1,5 @@
 require 'pg'
+require 'uri'
 class Bookmark
 
   def self.all
@@ -20,5 +21,10 @@ class Bookmark
     end
     connection.exec("INSERT INTO bookmarks (url) VALUES ('#{options[:url]}')")
   end
+
+  def self.is_valid?(url)
+    url =~ /\A#{URI::regexp(['http', 'https'])}\z/
+  end
+
 
 end

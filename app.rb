@@ -1,14 +1,22 @@
 require 'sinatra/base'
+require 'sinatra/flash'
 require './lib/bookmark'
 require 'pg'
 
 class BookmarkApp < Sinatra::Base
+  enable :sessions
+  register Sinatra::Flash
+
+  get '/' do
+    redirect '/bookmarks'
+  end
 
   get '/bookmarks/new' do
     erb(:"bookmarks/new")
   end
 
   post '/bookmarks' do
+    redirect '/error' unless Bookmark.is_valid?(params['url'])
     Bookmark.create(url: params['url'])
     redirect '/bookmarks'
   end
@@ -16,6 +24,10 @@ class BookmarkApp < Sinatra::Base
   get '/bookmarks' do
     @bookmarks = Bookmark.all
     erb(:index)
+  end
+
+  get '/error' do
+    flash[:notice] = "Invalid URL"
   end
 
   run! if app_file == $0
