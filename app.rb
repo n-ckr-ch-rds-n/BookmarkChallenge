@@ -21,6 +21,11 @@ class BookmarkApp < Sinatra::Base
     redirect '/bookmarks'
   end
 
+  post "/bookmarks/delete" do
+    Bookmark.delete(params['title'])
+    redirect '/bookmarks'
+  end
+
   get '/bookmarks' do
     @bookmarks = Bookmark.all
     erb(:index)
@@ -29,6 +34,11 @@ class BookmarkApp < Sinatra::Base
   get '/error' do
     #flash[:notice] = "Invalid URL"
     erb(:error)
+  end
+
+  get '/bookmarks/delete' do
+    @bookmarks = Bookmark.all
+    erb(:"bookmarks/delete")
   end
 
   run! if app_file == $0

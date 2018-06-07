@@ -1,0 +1,7 @@
+<form action="/bookmarks/delete" method="post">
+  <% @bookmarks.each do |bookmark| %>
+  <input type="radio" value="<%= bookmark.title %>" name="title" id="<%= bookmark.title %>">
+  <%=  bookmark.title %> <br>
+  <% end %>
+  <input type="submit" value="Delete">
+</form>
