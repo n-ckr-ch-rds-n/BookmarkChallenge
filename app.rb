@@ -27,7 +27,8 @@ class BookmarkApp < Sinatra::Base
   end
 
   get '/error' do
-    flash[:notice] = "Invalid URL"
+    #flash[:notice] = "Invalid URL"
+    erb(:error)
   end
 
   run! if app_file == $0
