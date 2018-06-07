@@ -1,8 +1,10 @@
+<h1>Welcome to the crayzee BooKmARQ app!!!</h1>
+<h2>HEre r all your crezee BOOKMRQUEWS!!!!!!!!!</h2>
 <ul>
   <% @bookmarks.each do |bookmark| %>
     <li>
       <a href="<%= bookmark.url %>">
-        <%= bookmark.id %>
+        <%= bookmark.title %>
       </a>
     </li>
   <% end %>

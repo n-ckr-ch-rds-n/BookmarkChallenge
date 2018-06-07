@@ -17,7 +17,7 @@ class BookmarkApp < Sinatra::Base
 
   post '/bookmarks' do
     redirect '/error' unless Bookmark.is_valid?(params['url'])
-    Bookmark.create(url: params['url'])
+    Bookmark.create(url: params['url'], title: params['title'])
     redirect '/bookmarks'
   end
 
