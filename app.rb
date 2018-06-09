@@ -11,14 +11,46 @@ class BookmarkApp < Sinatra::Base
     redirect '/bookmarks'
   end
 
+  get '/bookmarks' do
+    @bookmarks = Bookmark.all
+    erb(:index)
+  end
+
   get '/bookmarks/new' do
     erb(:"bookmarks/new")
   end
 
-  post '/bookmarks' do
+  post '/bookmarks/new' do
     redirect '/error' unless Bookmark.is_valid?(params['url'])
     Bookmark.create(url: params['url'], title: params['title'])
     redirect '/bookmarks'
+  end
+
+  get '/bookmarks/update' do
+    @bookmarks = Bookmark.all
+    erb(:"bookmarks/update")
+  end
+
+  post '/bookmarks/update' do
+    session[:titletoupdate] = params['title']
+    p session[:titletoupdate]
+    redirect '/bookmarks/newurl'
+  end
+
+  get "/bookmarks/newurl" do
+    erb(:"bookmarks/newurl")
+  end
+
+  post "/bookmarks/newurl" do
+    p params['newurl']
+    p session[:titletoupdate]
+    Bookmark.update(params['newurl'], session[:titletoupdate])
+    redirect '/bookmarks'
+  end
+
+  get '/bookmarks/delete' do
+    @bookmarks = Bookmark.all
+    erb(:"bookmarks/delete")
   end
 
   post "/bookmarks/delete" do
@@ -26,19 +58,8 @@ class BookmarkApp < Sinatra::Base
     redirect '/bookmarks'
   end
 
-  get '/bookmarks' do
-    @bookmarks = Bookmark.all
-    erb(:index)
-  end
-
   get '/error' do
-    #flash[:notice] = "Invalid URL"
     erb(:error)
-  end
-
-  get '/bookmarks/delete' do
-    @bookmarks = Bookmark.all
-    erb(:"bookmarks/delete")
   end
 
   run! if app_file == $0
